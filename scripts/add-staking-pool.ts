@@ -3,7 +3,7 @@ import { ethers, network } from "hardhat";
 import { Interface } from "@ethersproject/abi";
 
 const env = network.name;
-const addrs = require(`../addresses-mainnet.json`);
+const addrs = require(`../addresses-${env}.json`);
 
 const getTimelock = async () => {
   const TimelockControllerFactory = await ethers.getContractFactory(
@@ -22,7 +22,7 @@ const main = async () => {
     getCallData(),
     "0x0000000000000000000000000000000000000000000000000000000000000000",
     "0x0000000000000000000000000000000000000000000000000000000000000000",
-    24 * 3600
+    30
   );
   console.log("Scheduled.");
 };
@@ -31,7 +31,7 @@ const getCallData = () => {
   const abi = ["function add(uint256, address, bool)"];
   const iface = new Interface(abi);
 
-  return iface.encodeFunctionData("add", [1000, addrs.DBI, true]);
+  return iface.encodeFunctionData("add", [1000, addrs.SI, true]);
 };
 
 const getChangeTimelockCalldata = (newDelay: number) => {
@@ -45,10 +45,11 @@ const getChangeTimelockCalldata = (newDelay: number) => {
 const execute = async () => {
   const timelock = await getTimelock();
   const tx = await timelock.execute(
-    //    addrs.masterChef,
-    addrs.timelock,
+    addrs.masterChef,
+    //addrs.timelock,
     0,
-    getChangeTimelockCalldata(30),
+    // getChangeTimelockCalldata(30),
+    getCallData(),
     "0x0000000000000000000000000000000000000000000000000000000000000000",
     "0x0000000000000000000000000000000000000000000000000000000000000000"
   );
@@ -91,3 +92,4 @@ const setTimelockDuration = async (duration: number) => {
 };
 
 execute().then(console.log).catch(console.error);
+//console.log(getCallData());

@@ -6,7 +6,7 @@ const main = async () => {
   const addresses = require(`../addresses-${env}.json`);
   const pair = await ethers.getContractAt(
     "IUniswapV2Pair",
-    "0x27A4B45E2710fFA309A5aF968a264C60994D5608"
+    "0xd99c7F6C65857AC913a8f880A4cb84032AB2FC5b"
   );
   const reserves = await pair.getReserves();
   console.log(reserves[0].toString(), reserves[1].toString());

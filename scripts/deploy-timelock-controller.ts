@@ -1,11 +1,16 @@
 import { ethers } from "hardhat";
 
-export default async () => {
+const main = async () => {
   const timelockFactory = await ethers.getContractFactory("TimelockController");
   const [multisigWallet] = await ethers.getSigners();
   return timelockFactory.deploy(
-    24 * 3600,
+    //    24 * 3600,
+    30,
     [multisigWallet.address],
     [multisigWallet.address]
   );
 };
+
+main();
+
+export default main;

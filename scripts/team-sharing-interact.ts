@@ -18,6 +18,8 @@ const main = async () => {
   await tx.wait();
 };
 
+main();
+
 const proposeShareholders = async () => {
   const teamSharing = await getTeamSharing();
   const shareholders = [

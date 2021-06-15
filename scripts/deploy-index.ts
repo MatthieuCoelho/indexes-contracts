@@ -191,11 +191,11 @@ const main = async (deployController: boolean) => {
   };
 };
 
-main(false).then((result) => {
-  if (!result) return;
-  console.log(result);
-  fs.writeFileSync(
-    `addresses-${network}.json`,
-    JSON.stringify(result, null, 2)
-  );
-});
+// main(false).then((result) => {
+//   if (!result) return;
+//   console.log(result);
+//   fs.writeFileSync(
+//     `addresses-${network}.json`,
+//     JSON.stringify(result, null, 2)
+//   );
+// });
