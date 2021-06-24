@@ -31,6 +31,13 @@ const getAddStakingPoolCallData = (token: string, weight: number) => {
   return iface.encodeFunctionData("add", [weight, token, true]);
 };
 
+const getSetWeightCallData = (poolId: number, weight: number) => {
+  const abi = ["function set(uint256, uint256, bool)"];
+  const iface = new Interface(abi);
+
+  return iface.encodeFunctionData("set", [poolId, weight, true]);
+};
+
 const deployAndSchedule = async () => {
   const burnerStaker = await deployBurnerStaker();
 
@@ -53,14 +60,14 @@ const deployAndSchedule = async () => {
 
 const execute = async () => {
   console.log("lets execute");
-  const timelock = await getTimelock();
-  await timelock.execute(
-    addrs.masterChef,
-    0,
-    getAddStakingPoolCallData(addrs.burnerStaker, 7000),
-    "0x0000000000000000000000000000000000000000000000000000000000000000",
-    "0x0000000000000000000000000000000000000000000000000000000000000000"
-  );
+  //const timelock = await getTimelock();
+  //await timelock.execute(
+  //  addrs.masterChef,
+  //  0,
+  //  getAddStakingPoolCallData(addrs.burnerStaker, 7000),
+  //  "0x0000000000000000000000000000000000000000000000000000000000000000",
+  //  "0x0000000000000000000000000000000000000000000000000000000000000000"
+  //);
 
   const burnerStaker = await getBurnerStaker();
   await burnerStaker.stake(addrs.masterChef, 6, addrs.tokens.LEV);
@@ -72,10 +79,38 @@ const burn = async () => {
   await burner.burnToken();
 };
 
+const setPoolWeightSchedule = async () => {
+  const timelock = await getTimelock();
+
+  await timelock.schedule(
+    addrs.masterChef,
+    0,
+    getSetWeightCallData(6, 0),
+    "0x0000000000000000000000000000000000000000000000000000000000000000",
+    "0x0000000000000000000000000000000000000000000000000000000000000000",
+    30
+  );
+};
+
+const setPoolWeightExecute = async () => {
+  const timelock = await getTimelock();
+
+  await timelock.execute(
+    addrs.masterChef,
+    0,
+    getSetWeightCallData(6, 0),
+    "0x0000000000000000000000000000000000000000000000000000000000000000",
+    "0x0000000000000000000000000000000000000000000000000000000000000000"
+  );
+};
+
 const main = async () => {
   // deployAndSchedule();
   // execute();
-  burn();
+  // burn();
+
+  // setPoolWeightSchedule();
+  setPoolWeightExecute();
 };
 
 main();

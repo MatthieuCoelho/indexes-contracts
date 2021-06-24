@@ -86,10 +86,11 @@ const setTimelockDuration = async (duration: number) => {
     getChangeTimelockCalldata(duration),
     "0x0000000000000000000000000000000000000000000000000000000000000000",
     "0x0000000000000000000000000000000000000000000000000000000000000000",
-    24 * 3600
+    30
   );
   console.log("Scheduled.");
 };
 
-execute().then(console.log).catch(console.error);
-//console.log(getCallData());
+//execute().then(console.log).catch(console.error);
+setTimelockDuration(48 * 60 * 60);
+//console.log(getChangeTimelockCalldata(48 * 3600));
